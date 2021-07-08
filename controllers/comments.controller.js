@@ -1,9 +1,9 @@
-const Coment = require('../models/Comments.model')
+const Comment = require('../models/Comments.model')
 
 const controllers = {
   commentsClientAll: async (req, res)=> {
     try {
-      const comments = await Coment.find({})
+      const comments = await Comment.find({})
       res.json(comments)
     }catch (e) {
       console.log(e)
@@ -11,7 +11,7 @@ const controllers = {
   },
   commentsClientId: async (req, res)=> {
     try {
-      const comments = await Coment.findById(req.params.id)
+      const comments = await Comment.findById(req.params.id)
       res.json(comments)
     }catch (e) {
       console.log(e)
@@ -20,7 +20,7 @@ const controllers = {
 
   postComments: async (req, res)=> {
     try {
-      const comments = new Coment({ ...req.body })
+      const comments = new Comment({ ...req.body })
       await comments.save()
       res.json(comments)
     }catch (e) {
@@ -30,7 +30,7 @@ const controllers = {
 
   patchComments: async (req, res)=> {
     try {
-      const comments = await Coment.findByIdAndUpdate(req.params.id, req.body)
+      const comments = await Comment.findByIdAndUpdate(req.params.id, req.body)
       res.json(comments)
     }catch (e) {
       console.log(e)
@@ -40,7 +40,7 @@ const controllers = {
   removeComments: async (req, res)=> {
     try {
       const id = req.params.id
-      const comments = await Coment.findByIdAndDelete({ _id: id })
+      const comments = await Comment.findByIdAndDelete({ _id: id })
       res.json(comments)
     }catch (e) {
       console.log(e)

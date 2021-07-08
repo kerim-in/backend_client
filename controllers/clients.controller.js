@@ -18,6 +18,7 @@ const controllers = {
             firstName: 1,
             lastName: 1,
             patronymic: 1,
+            comments: 1,
             img: 1,
           },
         },
@@ -41,6 +42,7 @@ const controllers = {
       const client = new Client({ ...req.body });
       await client.save();
       res.json(client);
+
     } catch (e) {
       console.log(e);
     }

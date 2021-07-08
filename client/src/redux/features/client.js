@@ -24,6 +24,5 @@ export const loadClient = () => {
     const json = await res.json();
 
     dispatch({ type: "client/load", payload: json });
-    console.log(json)
   };
 };
