@@ -1,23 +1,25 @@
 const { Schema, model } = require("mongoose");
 
-const clientSchema = new Schema({
+const clientSchema = new Schema(
+  {
     firstName: {
       type: String,
-      required:true
+      required: true,
     },
     lastName: {
       type: String,
-      required:true
+      required: true,
     },
     patronymic: {
       type: String,
-      required:true
+      required: true,
     },
     img: {
       type: String,
+      required:true
     },
   },
-  {timestamps:true}
+  { timestamps: true }
 );
 
 const Client = model("Client", clientSchema);

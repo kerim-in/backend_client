@@ -1,11 +1,11 @@
 const Status = require('./../models/Status.model')
 
-const controllers = {
+module.exports.statusControllers = {
   statusAll: async (req, res) => {
     try {
 
       const status = await Status.find({})
-      res.json(status)
+      return res.json(status)
 
     } catch (e) {
       console.log(e)
@@ -14,16 +14,25 @@ const controllers = {
 
 
   statusPost: async (req, res) => {
-      
+    const { status, color } = req.body;
+
+    if(!status) {
+       return res.json({
+        error: 'Статус не указан'
+      })
+    }
+    if (!color){
+      return res.json({
+        error: 'Цвет не указан'
+      })
+    }
     try {
       const status = new Status({...req.body})
       await status.save()
-      res.json(status)
+      return res.json(status)
 
     } catch (e) {
       console.log(e)
     }
   },
 }
-
-module.exports = controllers

@@ -1,30 +1,28 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
-const morgan = require('morgan')
+const morgan = require("morgan");
+
+const { PORT, URL } = require("./config/config");
 const app = express();
 
 app.use(cors());
-app.use(morgan())
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(require('./routes/index'))
-
+app.use(require("./routes/index"));
 
 async function start() {
   try {
-    await mongoose.connect(
-      "mongodb+srv://kerim:API12345@cluster0.zyuvf.mongodb.net/hospitallBD",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
-    app.listen(5001, () => {
-      console.log("Server has been ... 5001");
+    await mongoose.connect(URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: true,
     });
-  }
-  catch (e) {
+    app.listen(PORT, () => {
+      console.log("Server has been ... " + PORT);
+    });
+  } catch (e) {
     console.log(e);
   }
 }

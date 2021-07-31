@@ -3,7 +3,7 @@ const initialState = {
   items: [],
 };
 
-export const statusReducer = (state = initialState, action) => {
+export const statusesReducer = (state = initialState, action) => {
   switch (action.type) {
     case "status/load":
       return {

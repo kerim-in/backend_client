@@ -1,13 +1,17 @@
+const { CommentsController } = require('../controllers/comments.controller');
+
 const express = require("express");
 const router = express.Router();
-const controller = require('../controllers/controller-comments.controller')
 
 
 
-router.get('/',controller.commentsClientId)
-router.get("/comments/:id", controller.commentsClientAll);
-router.post("/comments/:id", controller.postComments);
-router.patch("/comments/:id", controller.patchComments);
-router.delete("/comments/:id", controller.removeComments);
+
+router.get('/comments',CommentsController.getAllComments)
+router.get("/comments/:id", CommentsController.getAllCommentsById);
+router.get("/clients/:id/comments", CommentsController.getAllCommentsByClientId);
+router.post("/comments/:client/comments", CommentsController.postComments);
+router.patch("/comments/:id", CommentsController.patchComments);
+router.delete("/comments/:id", CommentsController.removeComments);
+
 
 module.exports = router;

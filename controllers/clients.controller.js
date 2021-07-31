@@ -1,6 +1,6 @@
 const Client = require("../models/Client.model");
 
-const controllers = {
+module.exports.clientsController = {
   clientGetAll: async (req, res) => {
     try {
       const client = await Client.aggregate([
@@ -13,6 +13,18 @@ const controllers = {
           },
         },
         {
+          $lookup: {
+            from: "comments",
+            as: "lastComments",
+            let: { client: "$_id" },
+            pipeline: [
+              { $match: { $expr: { $eq: ["$client", "$$client"] } } },
+              { $sort: { createdAt: -1 } },
+              { $limit: 1 },
+            ],
+          },
+        },
+        {
           $project: {
             _id: 1,
             firstName: 1,
@@ -20,7 +32,11 @@ const controllers = {
             patronymic: 1,
             comments: 1,
             img: 1,
+            lastComments: 1,
           },
+        },
+        {
+          $unwind: { path: "$lastComments", preserveNullAndEmptyArrays: true },
         },
       ]);
       res.json(client);
@@ -29,8 +45,13 @@ const controllers = {
     }
   },
   clientGetId: async (req, res) => {
+    const { id } = req.params;
+    console.log(id)
     try {
-      const client = await Client.findById(req.params.id);
+      const client  = await Client.findById(id);
+      if (!client){
+        return
+      }
       res.json(client);
     } catch (e) {
       console.log(e);
@@ -39,10 +60,35 @@ const controllers = {
 
   clientPost: async (req, res) => {
     try {
-      const client = new Client({ ...req.body });
-      await client.save();
-      res.json(client);
+      const { lastName,firstName,  patronymic, img } = req.body;
+        const client = await Client.create({
+          firstName,
+          lastName,
+          patronymic,
+          img,
+        })
+      if (!firstName){
+        return res.json({
+          error: "Фамилия не найдено не найдено "
+        })
+      }
+      if (!lastName){
+        return res.json({
+          error: "Имя не найдено "
+        })
+      }
+      if (!patronymic){
+        return res.json({
+          error: "Отчество не найдено "
+        })
+      }
+      if (!img){
+        return res.json({
+          error: "img не найдено "
+        })
+      }
 
+      res.json(client);
     } catch (e) {
       console.log(e);
     }
@@ -58,8 +104,9 @@ const controllers = {
   },
 
   clientDelete: async (req, res) => {
+    const { id } = req.params;
+
     try {
-      const id = req.params.id;
       const client = await Client.findByIdAndDelete({ _id: id });
       res.json(client);
     } catch (e) {
@@ -67,4 +114,3 @@ const controllers = {
     }
   },
 };
-module.exports = controllers;

@@ -1,9 +1,10 @@
+const { statusControllers } = require('../controllers/statuses.controller');
+
 const express = require('express')
 const router = express.Router()
-const controller = require('./../controllers/status.controller')
 
-router.get('/status', controller.statusAll)
-router.post('/status', controller.statusPost)
+router.get('/status', statusControllers.statusAll)
+router.post('/status', statusControllers.statusPost)
 
 
 module.exports = router
